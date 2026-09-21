@@ -1,15 +1,128 @@
-generator client { provider = "prisma-client-js" }
-datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+generator client {
+  provider = "prisma-client-js"
+}
 
-enum ProductStatus { DRAFT EXTRACTED VERIFIED LOCKED }
-enum CharacterStatus { UNLOCKED LOCKED }
-model Project { id String @id @default(cuid()); name String; createdAt DateTime @default(now()); updatedAt DateTime @updatedAt; product Product?; characters Character[]; storyTemplates StoryTemplate[]; campaigns Campaign[] }
-model Product { id String @id @default(cuid()); projectId String @unique; project Project @relation(fields:[projectId], references:[id], onDelete:Cascade); name String?; brand String?; model String?; originalPrice String?; salePrice String?; warranty String?; sourceUrl String?; status ProductStatus @default(DRAFT); specifications ProductSpecification[]; features ProductFeature[]; images ProductImage[]; createdAt DateTime @default(now()); updatedAt DateTime @updatedAt }
-model ProductSpecification { id String @id @default(cuid()); productId String; product Product @relation(fields:[productId], references:[id], onDelete:Cascade); name String; value String?; unit String?; verified Boolean @default(false) }
-model ProductFeature { id String @id @default(cuid()); productId String; product Product @relation(fields:[productId], references:[id], onDelete:Cascade); label String; verified Boolean @default(false) }
-model ProductImage { id String @id @default(cuid()); productId String; product Product @relation(fields:[productId], references:[id], onDelete:Cascade); url String; alt String?; sourceUrl String? }
-model Character { id String @id @default(cuid()); projectId String; project Project @relation(fields:[projectId], references:[id], onDelete:Cascade); name String; description String?; status CharacterStatus @default(UNLOCKED); createdAt DateTime @default(now()); updatedAt DateTime @updatedAt }
-model StoryTemplate { id String @id @default(cuid()); projectId String; project Project @relation(fields:[projectId], references:[id], onDelete:Cascade); name String; content String; createdAt DateTime @default(now()) }
-model Campaign { id String @id @default(cuid()); projectId String; project Project @relation(fields:[projectId], references:[id], onDelete:Cascade); name String; objective String?; videoPrompts VideoPrompt[]; createdAt DateTime @default(now()); updatedAt DateTime @updatedAt }
-model VideoPrompt { id String @id @default(cuid()); campaignId String?; campaign Campaign? @relation(fields:[campaignId], references:[id], onDelete:SetNull); sequence Int; prompt String; qaResults QAResult[]; createdAt DateTime @default(now()); updatedAt DateTime @updatedAt }
-model QAResult { id String @id @default(cuid()); videoPromptId String; videoPrompt VideoPrompt @relation(fields:[videoPromptId], references:[id], onDelete:Cascade); passed Boolean; findings Json; createdAt DateTime @default(now()) }
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProductStatus {
+  DRAFT
+  EXTRACTED
+  VERIFIED
+  LOCKED
+}
+
+enum CharacterStatus {
+  UNLOCKED
+  LOCKED
+}
+
+model Project {
+  id             String          @id @default(cuid())
+  name           String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  product        Product?
+  characters     Character[]
+  storyTemplates StoryTemplate[]
+  campaigns      Campaign[]
+}
+
+model Product {
+  id               String                @id @default(cuid())
+  projectId        String                @unique
+  project          Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name             String?
+  brand            String?
+  model            String?
+  originalPrice    String?
+  salePrice        String?
+  warranty         String?
+  sourceUrl        String?
+  status           ProductStatus         @default(DRAFT)
+  specifications   ProductSpecification[]
+  features         ProductFeature[]
+  images           ProductImage[]
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+}
+
+model ProductSpecification {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String
+  value     String?
+  unit      String?
+  verified  Boolean @default(false)
+}
+
+model ProductFeature {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  label     String
+  verified  Boolean @default(false)
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  sourceUrl String?
+}
+
+model Character {
+  id          String          @id @default(cuid())
+  projectId   String
+  project     Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  status      CharacterStatus @default(UNLOCKED)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model StoryTemplate {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Campaign {
+  id           String        @id @default(cuid())
+  projectId    String
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name         String
+  objective    String?
+  videoPrompts VideoPrompt[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model VideoPrompt {
+  id           String       @id @default(cuid())
+  campaignId   String?
+  campaign     Campaign?    @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  sequence     Int
+  prompt       String
+  qaResults    QAResult[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model QAResult {
+  id            String      @id @default(cuid())
+  videoPromptId String
+  videoPrompt   VideoPrompt @relation(fields: [videoPromptId], references: [id], onDelete: Cascade)
+  passed        Boolean
+  findings      Json
+  createdAt     DateTime    @default(now())
+}
