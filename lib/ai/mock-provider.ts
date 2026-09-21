@@ -1,0 +1,2 @@
+import type { AIProvider, PromptRequest, PromptValidation, StoryRequest } from "./provider";
+export class MockAIProvider implements AIProvider { async generateStory(input: StoryRequest) { return `Mock story for ${input.productName ?? "unknown product"}.`; } async generatePrompt(input: PromptRequest) { return `Mock prompt ${input.videoNumber}: ${input.story}`; } async validatePrompt(_prompt: string): Promise<PromptValidation> { return { passed: true, findings: [] }; } }
