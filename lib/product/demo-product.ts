@@ -1,0 +1,2 @@
+import type { ProductInput } from "@/lib/validation/product";
+export const demoProduct: ProductInput = { name: "Demo Washing Machine", brand: "DemoBrand", model: "DEMO-9000", originalPrice: "10,000,000 VND", salePrice: "8,000,000 VND", warranty: null, sourceUrl: null, status: "VERIFIED", specifications: [], features: [{ label: "8kg capacity", verified: true }, { label: "Inverter motor", verified: true }] };
