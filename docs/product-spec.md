@@ -1,0 +1,2 @@
+# Product specification V1
+Một Project có một Product. Product fact gồm name, brand, model, original/sale price, warranty, source URL, specifications, features và images. Product status: DRAFT → EXTRACTED → VERIFIED → LOCKED. Trường factual có thể null; chỉ feature/spec có nguồn mới được đánh dấu verified. Demo fixture chỉ chứa DemoBrand, Demo Washing Machine, DEMO-9000, giá 10,000,000/8,000,000 VND, 8kg capacity và Inverter motor.
