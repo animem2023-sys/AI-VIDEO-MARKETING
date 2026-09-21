@@ -1,0 +1,3 @@
+import { describe, expect, it } from "vitest";
+import { productSchema } from "@/lib/validation/product";
+describe("productSchema", () => { it("preserves unknown factual fields as null", () => { const result = productSchema.parse({ name: null, brand: null, model: null, originalPrice: null, salePrice: null, warranty: null, sourceUrl: null }); expect(result.status).toBe("DRAFT"); expect(result.name).toBeNull(); }); it("rejects malformed product URLs", () => { expect(() => productSchema.parse({ name: null, brand: null, model: null, originalPrice: null, salePrice: null, warranty: null, sourceUrl: "not-url" })).toThrow(); }); });
