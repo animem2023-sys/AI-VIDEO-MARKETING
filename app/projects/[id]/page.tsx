@@ -1,0 +1,1 @@
+export default function ProjectOverview() { return <section><p className="text-sm font-semibold text-indigo-600">PROJECT OVERVIEW</p><h1 className="mt-1 text-3xl font-bold">Dự án mới</h1><p className="mt-4 text-slate-600">Bắt đầu với Product Source, sau đó khóa dữ liệu sản phẩm và nhân vật trước khi tạo chuỗi video.</p></section>; }
