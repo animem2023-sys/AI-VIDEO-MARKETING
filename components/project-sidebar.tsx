@@ -1,0 +1,3 @@
+import Link from "next/link";
+const items = ["Overview", "Product", "Character", "Story", "Videos", "QA", "Export"];
+export function ProjectSidebar({ id }: { id: string }) { return <aside className="w-full border-b border-slate-200 bg-white p-4 md:min-h-screen md:w-56 md:border-b-0 md:border-r"><Link className="font-bold text-slate-900" href="/dashboard">AI VIDEO PROMPT STUDIO</Link><nav className="mt-6 flex gap-2 overflow-x-auto md:flex-col">{items.map((item) => { const slug = item.toLowerCase(); const href = slug === "overview" ? `/projects/${id}` : `/projects/${id}/${slug}`; return <Link className="rounded-md px-3 py-2 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700" href={href} key={item}>{item}</Link>; })}</nav></aside>; }
