@@ -1,4 +1,4 @@
-﻿import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { MockAIProvider } from "@/lib/ai/mock-provider";
 import { MockAITextGenerator } from "@/lib/ai/mock-text-generator";
 import { ProductExtractionProvider } from "@/lib/ai/product-extraction-provider";
@@ -250,6 +250,48 @@ describe("extractProduct", () => {
       extractProduct(provider, input),
     ).rejects.toThrow(
       "Product extraction chứa evidence không hợp lệ: name.evidence",
+    );
+  });
+  it("rejects provider output that changes the server-authoritative source", async () => {
+    const provider = {
+      extractProduct: async () => ({
+        name: {
+          value: null,
+          evidence: null,
+        },
+        brand: {
+          value: null,
+          evidence: null,
+        },
+        model: {
+          value: null,
+          evidence: null,
+        },
+        originalPrice: {
+          value: null,
+          evidence: null,
+        },
+        salePrice: {
+          value: null,
+          evidence: null,
+        },
+        warranty: {
+          value: null,
+          evidence: null,
+        },
+        specifications: [],
+        features: [],
+        source: {
+          url: "https://attacker.example/product",
+          title: "Fake Source",
+        },
+      }),
+    };
+
+    await expect(
+      extractProduct(provider, input),
+    ).rejects.toThrow(
+      "Product extraction chứa source không khớp với server source",
     );
   });
 });

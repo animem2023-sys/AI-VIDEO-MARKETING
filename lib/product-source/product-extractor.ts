@@ -12,7 +12,14 @@ export async function extractProduct(
 ): Promise<ProductExtraction> {
   const result = await provider.extractProduct(input);
   const extraction = productExtractionSchema.parse(result);
-
+  if (
+    extraction.source.url !== input.source.url ||
+    extraction.source.title !== input.source.title
+  ) {
+    throw new Error(
+      "Product extraction chứa source không khớp với server source",
+    );
+  }
   const evidenceFindings = validateProductEvidence(
     extraction,
     input.evidenceCandidates,
