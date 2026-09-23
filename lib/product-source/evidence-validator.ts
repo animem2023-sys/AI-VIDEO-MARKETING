@@ -10,17 +10,35 @@ export function validateProductEvidence(
   extraction: ProductExtraction,
   evidenceCandidates: EvidenceCandidate[],
 ): EvidenceValidationFinding[] {
-  const evidenceTexts = new Set(
-    evidenceCandidates.map((candidate) => candidate.text),
-  );
-
   const findings: EvidenceValidationFinding[] = [];
 
   const checkEvidence = (path: string, evidence: string | null) => {
-    if (evidence !== null && !evidenceTexts.has(evidence)) {
+    if (evidence === null) {
+      return;
+    }
+
+    const matchingCandidates = evidenceCandidates.filter(
+      (candidate) => candidate.text === evidence,
+    );
+
+    if (matchingCandidates.length === 0) {
       findings.push({
         path,
-        message: "Evidence không tồn tại trong Evidence Candidates.",
+        message:
+          "Evidence kh\u00f4ng t\u1ed3n t\u1ea1i trong Evidence Candidates.",
+      });
+      return;
+    }
+
+    const hasMatchingSource = matchingCandidates.some(
+      (candidate) => candidate.sourceUrl === extraction.source.url,
+    );
+
+    if (!hasMatchingSource) {
+      findings.push({
+        path,
+        message:
+          "Evidence thu\u1ed9c ngu\u1ed3n URL kh\u00f4ng kh\u1edbp v\u1edbi Server Source.",
       });
     }
   };

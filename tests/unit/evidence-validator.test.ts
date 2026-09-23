@@ -67,6 +67,40 @@ describe("validateProductEvidence", () => {
     ]);
   });
 
+  it("rejects evidence from a different source URL", () => {
+    const findings = validateProductEvidence(baseExtraction, [
+      {
+        text: "Máy giặt Aqua",
+        sourceUrl: "https://attacker.example/product",
+        context: null,
+      },
+    ]);
+
+    expect(findings).toEqual([
+      {
+        path: "name.evidence",
+        message: "Evidence thuộc nguồn URL không khớp với Server Source.",
+      },
+    ]);
+  });
+
+  it("accepts matching evidence even when another candidate has the same text from a different source", () => {
+    const findings = validateProductEvidence(baseExtraction, [
+      {
+        text: "Máy giặt Aqua",
+        sourceUrl,
+        context: null,
+      },
+      {
+        text: "Máy giặt Aqua",
+        sourceUrl: "https://attacker.example/product",
+        context: null,
+      },
+    ]);
+
+    expect(findings).toEqual([]);
+  });
+
   it("allows extraction with no evidence", () => {
     const extraction = productExtractionSchema.parse({
       name: {
