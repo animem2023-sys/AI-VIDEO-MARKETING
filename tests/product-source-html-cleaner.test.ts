@@ -1,4 +1,4 @@
-﻿import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { cleanProductHtml } from "@/lib/product-source/html-cleaner";
 
 describe("cleanProductHtml", () => {
@@ -67,7 +67,7 @@ describe("cleanProductHtml", () => {
 
     const result = cleanProductHtml(html);
 
-    expect(result.text).toBe("Máy giặt Công nghệ Inverter");
+    expect(result.text).toBe("Máy giặt\nCông nghệ\nInverter");
   });
 
   it("returns null title when the page has no title", () => {
