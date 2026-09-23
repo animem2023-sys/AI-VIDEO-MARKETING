@@ -1,14 +1,13 @@
-﻿import { z } from "zod";
-
-const nullableString = z.string().trim().min(1).nullable();
+import { z } from "zod";
+import { productFactSchema } from "./product-fact";
 
 export const productExtractionSchema = z.object({
-  name: nullableString,
-  brand: nullableString,
-  model: nullableString,
-  originalPrice: nullableString,
-  salePrice: nullableString,
-  warranty: nullableString,
+  name: productFactSchema,
+  brand: productFactSchema,
+  model: productFactSchema,
+  originalPrice: productFactSchema,
+  salePrice: productFactSchema,
+  warranty: productFactSchema,
 
   specifications: z.array(
     z.object({
@@ -21,14 +20,14 @@ export const productExtractionSchema = z.object({
   features: z.array(
     z.object({
       name: z.string().trim().min(1),
-      description: nullableString,
+      description: z.string().trim().min(1).nullable(),
       evidence: z.string().trim().min(1),
     }),
   ),
 
   source: z.object({
     url: z.string().url(),
-    title: nullableString,
+    title: z.string().trim().min(1).nullable(),
   }),
 });
 
