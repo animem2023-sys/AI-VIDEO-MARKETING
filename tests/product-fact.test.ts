@@ -1,31 +1,62 @@
-import { describe, expect, it } from "vitest";
+﻿import { describe, expect, it } from "vitest";
 import { productFactSchema } from "@/lib/product-source/product-fact";
 
 describe("productFactSchema", () => {
   it("accepts a fact with value and evidence", () => {
-    const result = productFactSchema.safeParse({
-      value: "AQUA",
-      evidence: "Th��ng hi?u: AQUA",
+    expect(
+      productFactSchema.parse({
+        value: "480L",
+        evidence: "Dung tích 480L",
+      }),
+    ).toEqual({
+      value: "480L",
+      evidence: "Dung tích 480L",
     });
-
-    expect(result.success).toBe(true);
   });
 
   it("accepts an unavailable fact", () => {
-    const result = productFactSchema.safeParse({
+    expect(
+      productFactSchema.parse({
+        value: null,
+        evidence: null,
+      }),
+    ).toEqual({
       value: null,
       evidence: null,
     });
-
-    expect(result.success).toBe(true);
   });
 
-  it("rejects empty value or evidence", () => {
-    const result = productFactSchema.safeParse({
-      value: "",
-      evidence: "",
-    });
+  it("rejects an empty value or evidence", () => {
+    expect(() =>
+      productFactSchema.parse({
+        value: "",
+        evidence: "Dung tích 480L",
+      }),
+    ).toThrow();
 
-    expect(result.success).toBe(false);
+    expect(() =>
+      productFactSchema.parse({
+        value: "480L",
+        evidence: "",
+      }),
+    ).toThrow();
+  });
+
+  it("rejects a value without evidence", () => {
+    expect(() =>
+      productFactSchema.parse({
+        value: "480L",
+        evidence: null,
+      }),
+    ).toThrow();
+  });
+
+  it("rejects evidence without a value", () => {
+    expect(() =>
+      productFactSchema.parse({
+        value: null,
+        evidence: "Dung tích 480L",
+      }),
+    ).toThrow();
   });
 });
