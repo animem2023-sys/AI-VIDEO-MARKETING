@@ -1,4 +1,5 @@
-﻿import { validateProductSourceUrl } from "./url";
+﻿import { assertSafeProductSourceHost } from "./host-safety";
+import { validateProductSourceUrl } from "./url";
 
 const DEFAULT_TIMEOUT_MS = 10_000;
 const MAX_RESPONSE_BYTES = 2_000_000;
@@ -20,6 +21,9 @@ export async function fetchProductSource(
   }
 
   const url = validation.data;
+  const parsedUrl = new URL(url);
+
+  await assertSafeProductSourceHost(parsedUrl.hostname);
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
