@@ -15,7 +15,7 @@ describe("POST /api/product-source/fetch", () => {
     vi.clearAllMocks();
   });
 
-  it("returns cleaned source data and evidence candidates for a valid request", async () => {
+  it("returns cleaned source data, evidence candidates, and extracted product for a valid request", async () => {
     fetchProductSourceMock.mockResolvedValue({
       url: "https://example.com/product",
       status: 200,
@@ -55,6 +55,7 @@ describe("POST /api/product-source/fetch", () => {
     expect(body.source.title).toBe("Test Product");
     expect(body.content.text).toContain("Máy giặt Aqua");
     expect(body.content.text).not.toContain("remove-me");
+
     expect(body.evidenceCandidates).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -66,6 +67,47 @@ describe("POST /api/product-source/fetch", () => {
           sourceUrl: "https://example.com/product",
         }),
       ]),
+    );
+
+    expect(body.product).toEqual(
+      expect.objectContaining({
+        name: {
+          value: null,
+          evidence: null,
+        },
+        brand: {
+          value: null,
+          evidence: null,
+        },
+        model: {
+          value: null,
+          evidence: null,
+        },
+        originalPrice: {
+          value: null,
+          evidence: null,
+        },
+        salePrice: {
+          value: null,
+          evidence: null,
+        },
+        warranty: {
+          value: null,
+          evidence: null,
+        },
+        specifications: [
+          {
+            key: "mock",
+            value: "mock",
+            evidence: expect.any(String),
+          },
+        ],
+        features: [],
+        source: {
+          url: "https://example.com/product",
+          title: "Test Product",
+        },
+      }),
     );
 
     expect(fetchProductSourceMock).toHaveBeenCalledWith(

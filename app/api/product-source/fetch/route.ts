@@ -1,7 +1,9 @@
 ﻿import { NextResponse } from "next/server";
+import { MockAIProvider } from "@/lib/ai/mock-provider";
 import { extractEvidenceCandidates } from "@/lib/product-source/evidence-extractor";
 import { fetchProductSource } from "@/lib/product-source/fetch";
 import { cleanProductHtml } from "@/lib/product-source/html-cleaner";
+import { extractProduct } from "@/lib/product-source/product-extractor";
 import { productSourceFetchRequestSchema } from "@/lib/product-source/fetch-request-schema";
 
 export async function POST(request: Request) {
@@ -26,6 +28,16 @@ export async function POST(request: Request) {
       fetched.url,
     );
 
+    const provider = new MockAIProvider();
+
+    const product = await extractProduct(provider, {
+      evidenceCandidates,
+      source: {
+        url: fetched.url,
+        title: cleaned.title,
+      },
+    });
+
     return NextResponse.json({
       source: {
         url: fetched.url,
@@ -37,6 +49,7 @@ export async function POST(request: Request) {
         text: cleaned.text,
       },
       evidenceCandidates,
+      product,
     });
   } catch {
     return NextResponse.json(
