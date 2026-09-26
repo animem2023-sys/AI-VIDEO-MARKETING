@@ -1,13 +1,73 @@
-ï»¿import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { MockAIProvider } from "@/lib/ai/mock-provider";
+import { createVerifiedProductContext } from "@/lib/product-source/verified-context";
+import { lockCharacter } from "@/lib/characters/continuity";
 
 describe("MockAIProvider", () => {
   it("implements the AI provider operations", async () => {
     const provider = new MockAIProvider();
 
+    const product = createVerifiedProductContext({
+      name: {
+        value: "Demo Washing Machine",
+        evidence: "Demo Washing Machine",
+      },
+      brand: {
+        value: null,
+        evidence: null,
+      },
+      model: {
+        value: null,
+        evidence: null,
+      },
+      originalPrice: {
+        value: null,
+        evidence: null,
+      },
+      salePrice: {
+        value: null,
+        evidence: null,
+      },
+      warranty: {
+        value: null,
+        evidence: null,
+      },
+      specifications: [],
+      features: [],
+      source: {
+        url: "https://example.com/product",
+        title: "Demo Washing Machine",
+      },
+    });
+
+    const character = lockCharacter({
+      name: "Linh",
+      description: "Nhân v?t chính",
+      appearance: {
+        gender: "female",
+        age: 25,
+        ethnicity: "Vietnamese",
+        height: "165 cm",
+        bodyType: "balanced",
+        face: "friendly",
+        hair: "black",
+        eyes: "dark brown",
+      },
+      wardrobe: {
+        outfit: "white shirt",
+        shoes: "sneakers",
+        accessories: null,
+      },
+      personality: "cheerful",
+      voice: "warm",
+      behavior: "natural",
+      status: "UNLOCKED",
+    });
+
     await expect(
       provider.generateStory({
-        productName: "Demo Washing Machine",
+        product,
+        character,
         objective: null,
       }),
     ).resolves.toContain("Demo Washing Machine");
@@ -31,7 +91,7 @@ describe("MockAIProvider", () => {
     const result = await provider.extractProduct({
       evidenceCandidates: [
         {
-          text: "MÃ¡y giáº·t Aqua 8 kg",
+          text: "Máy gi?t Aqua 8 kg",
           sourceUrl: "https://example.com/product",
           context: null,
         },
@@ -56,7 +116,7 @@ describe("MockAIProvider", () => {
       {
         key: "mock",
         value: "mock",
-        evidence: "MÃ¡y giáº·t Aqua 8 kg",
+        evidence: "Máy gi?t Aqua 8 kg",
       },
     ]);
   });

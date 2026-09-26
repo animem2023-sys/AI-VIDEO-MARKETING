@@ -9,7 +9,7 @@ import type { ProductExtraction } from "@/lib/product-source/extraction-schema";
 
 export class MockAIProvider implements AIProvider {
   async generateStory(input: StoryRequest) {
-    return `Mock story for ${input.productName ?? "unknown product"}.`;
+    return `Mock story for ${input.product.name.value ?? "unknown product"} with character ${input.character.name}.`;
   }
 
   async generatePrompt(input: PromptRequest) {
@@ -26,30 +26,12 @@ export class MockAIProvider implements AIProvider {
     const firstEvidence = input.evidenceCandidates[0]?.text ?? null;
 
     return {
-      name: {
-        value: null,
-        evidence: null,
-      },
-      brand: {
-        value: null,
-        evidence: null,
-      },
-      model: {
-        value: null,
-        evidence: null,
-      },
-      originalPrice: {
-        value: null,
-        evidence: null,
-      },
-      salePrice: {
-        value: null,
-        evidence: null,
-      },
-      warranty: {
-        value: null,
-        evidence: null,
-      },
+      name: { value: null, evidence: null },
+      brand: { value: null, evidence: null },
+      model: { value: null, evidence: null },
+      originalPrice: { value: null, evidence: null },
+      salePrice: { value: null, evidence: null },
+      warranty: { value: null, evidence: null },
       specifications: firstEvidence
         ? [
             {
