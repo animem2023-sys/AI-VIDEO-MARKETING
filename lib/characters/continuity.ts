@@ -1,4 +1,11 @@
-﻿import type { Character } from "@/lib/characters/schema";
+import type { Character } from "@/lib/characters/schema";
+
+export class CharacterLockedError extends Error {
+  constructor() {
+    super("Character đang LOCKED và không thể chỉnh sửa.");
+    this.name = "CharacterLockedError";
+  }
+}
 
 export function canUpdateCharacter(character: Character): boolean {
   return character.status === "UNLOCKED";
@@ -6,7 +13,7 @@ export function canUpdateCharacter(character: Character): boolean {
 
 export function assertCharacterEditable(character: Character): void {
   if (!canUpdateCharacter(character)) {
-    throw new Error("Character đang LOCKED và không thể chỉnh sửa.");
+    throw new CharacterLockedError();
   }
 }
 
