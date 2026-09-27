@@ -21,26 +21,26 @@ function createCharacterRecord(
   return {
     id: "char-001",
     projectId: "project-001",
-    name: "Nh�n v?t th? nghi?m",
-    description: "M� t? nh�n v?t",
+    name: "Nhân vật thử nghiệm",
+    description: "Mô tả nhân vật",
     appearance: {
       gender: "Nam",
       age: 25,
-      ethnicity: "Ch�u �",
+      ethnicity: "Châu Á",
       height: "178 cm",
-      bodyType: "C�n �?i",
-      face: "Th�n thi?n",
-      hair: "T�c �en",
-      eyes: "N�u",
+      bodyType: "Cân đối",
+      face: "Thân thiện",
+      hair: "Tóc đen",
+      eyes: "Nâu",
     },
     wardrobe: {
-      outfit: "�o s� mi tr?ng",
-      shoes: "Gi�y �en",
+      outfit: "Áo sơ mi trắng",
+      shoes: "Giày đen",
       accessories: null,
     },
-    personality: "Vui v?",
-    voice: "Nam tr?",
-    behavior: "T? nhi�n",
+    personality: "Vui vẻ",
+    voice: "Nam trẻ",
+    behavior: "Tự nhiên",
     status: "UNLOCKED",
     ...overrides,
   };
@@ -117,11 +117,11 @@ describe("character api service", () => {
       repository,
       "project-001",
       "char-001",
-      { name: "Nh�n v?t �? c?p nh?t" },
+      { name: "Nhân vật đã cập nhật" },
     );
 
-    expect(result.name).toBe("Nh�n v?t �? c?p nh?t");
-    expect(repository.updatedInput?.name).toBe("Nh�n v?t �? c?p nh?t");
+    expect(result.name).toBe("Nhân vật đã cập nhật");
+    expect(repository.updatedInput?.name).toBe("Nhân vật đã cập nhật");
   });
 
   it("rejects update when character is locked", async () => {
@@ -134,7 +134,7 @@ describe("character api service", () => {
         repository,
         "project-001",
         "char-001",
-        { name: "Kh�ng ��?c c?p nh?t" },
+        { name: "Không được cập nhật" },
       ),
     ).rejects.toThrow(/LOCKED/);
   });
@@ -147,7 +147,7 @@ describe("character api service", () => {
         repository,
         "project-001",
         "char-001",
-        { name: "Nh�n v?t m?i" },
+        { name: "Nhân vật mới" },
       ),
     ).rejects.toBeInstanceOf(CharacterNotFoundError);
   });
@@ -162,7 +162,7 @@ describe("character api service", () => {
         repository,
         "project-001",
         "char-001",
-        { name: "Kh�ng ��?c c?p nh?t" },
+        { name: "Không được cập nhật" },
       ),
     ).rejects.toBeInstanceOf(CharacterProjectMismatchError);
   });
@@ -202,7 +202,7 @@ describe("character api service", () => {
       repository,
       "project-001",
       {
-        name: "Nh�n v?t m?i",
+        name: "Nhân vật mới",
         description: null,
         appearance: {
           gender: null,
@@ -226,7 +226,7 @@ describe("character api service", () => {
     );
 
     expect(result.projectId).toBe("project-001");
-    expect(result.name).toBe("Nh�n v?t m?i");
-    expect(repository.createdInput?.name).toBe("Nh�n v?t m?i");
+    expect(result.name).toBe("Nhân vật mới");
+    expect(repository.createdInput?.name).toBe("Nhân vật mới");
   });
 });
